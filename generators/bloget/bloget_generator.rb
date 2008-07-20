@@ -37,7 +37,7 @@ class BlogetGenerator < Rails::Generator::Base
         )
       end
       
-      m.readme '../../../README'
+      m.readme '../../../README.rdoc'
               
     end
   end

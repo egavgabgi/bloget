@@ -11,7 +11,7 @@
   <% if logged_in? and comment.poster == current_user %>
     <ul class="horizontal-menu">
       <li>
-        <%= link_to "Edit comment", edit_comment_url(comment.post, comment) %>
+        <%= link_to "Edit comment", edit_post_comment_url(comment.post, comment) %>
       </li>
     </ul>
   <% end %>

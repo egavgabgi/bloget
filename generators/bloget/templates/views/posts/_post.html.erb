@@ -19,7 +19,7 @@
   <% end %>
   <% if logged_in? %>
     <li>
-      <%= link_to "Add comment", new_comment_url(post) %>
+      <%= link_to "Add comment", new_post_comment_url(post) %>
     </li>
     
     <% if post.poster == current_user %>

@@ -11,7 +11,7 @@ xml.atom :feed, 'xmlns:atom' => 'http://www.w3.org/2005/Atom' do
 
   @post.comments.each do |comment|
     xml.<< render(:partial => 'entry', :object => comment, :locals => {
-      :id => comment_url(:post_id => @post, :id => comment),
+      :id => post_comment_url(:post_id => @post, :id => comment),
       :link => post_url(:id => @post, :anchor => "comment_#{comment.id}" )
     })
   end

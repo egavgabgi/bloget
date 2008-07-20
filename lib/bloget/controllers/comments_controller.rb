@@ -4,14 +4,11 @@ module Bloget
       
       def self.included(base)
         base.class_eval do
-          
-          around_filter :load_post
-          
+          around_filter :load_post          
           before_filter :login_required, :only => [ :new, :create, :edit, :update ]
           before_filter :authenticate_for_comment, :only => [:edit, :update]
 
-          layout 'bloget'
-          
+          layout 'bloget'          
         end
       end
   
