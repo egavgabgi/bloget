@@ -42,19 +42,15 @@ This layout references +bloget.css+, which is installed in your +public/styleshe
 
 You will need to add these routes, or routes like them, to +config/routes.rb+:
 
+    map.resources :posts do |post|
+      post.resources :comments
+    end
+    
+If you would like to show your posts at the URL '/blog', you may want to add the following routes:
+
     map.with_options :controller => 'posts', :conditions => {:method => :get} do |bloget|
       bloget.blog '/blog', :action => 'index'
       bloget.formatted_blog '/blog.:format', :action => 'index'
     end
 
-    map.resources(:posts)
-    map.resources(:comments, :path_prefix => '/posts/:post_id')
-    
-Note that Bloget relies on named routes, and so you must have routes named in this fashion. Specifically, this won't work:
-
-    map.resources :posts do |post|
-      post.resources :comments
-    end
-
-
-Copyright (c) 2007 Clinton R. Nixon of Viget Labs, released under the MIT license
+Copyright (c) 2007-2008 Clinton R. Nixon of Viget Labs, released under the MIT license
