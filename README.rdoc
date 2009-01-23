@@ -28,9 +28,7 @@ The Will Paginate plugin is also not necessary, but very useful. Bloget will det
 
 In your user model:
 
-    has_one :blogger, :as => :poster
-    has_many :posts, :as => :poster
-    has_many :comments, :as => :poster
+    include Bloget::Models::Poster
     
 === Templates
 
