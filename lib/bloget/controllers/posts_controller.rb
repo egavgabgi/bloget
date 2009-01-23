@@ -23,36 +23,30 @@ module Bloget
         @blog ||= Blog.instance
                 
         @rss = formatted_posts_url(:format => 'atom')
-    
-        conditions = Hash.new
-        unless logged_in? and Blogger.valid_blogger?(current_user)
-          conditions[:state] = 'published'
-        end
-
-        find_args = {:order => 'created_at DESC'}
-        unless conditions.empty?
-          find_args[:conditions] = conditions
-        end
+        
+        posts = if logged_in? and Blogger.valid_blogger?(current_user)
+                  Post.chronologically
+                else
+                  Post.published.chronologically
+                end
         
         respond_to do |format|
-          
           format.html do
-            if Post.respond_to?(:paginate)
-              @posts = Post.paginate(:all, find_args.merge(:page => params[:page]))
+            if posts.respond_to?(:paginate)
+              @posts = posts.paginate(:all, :page => params[:page])
             else
-              @posts = Post.find(:all, find_args)
+              @posts = posts.find(:all)
             end  
           end
           
           format.atom do 
-            if Post.respond_to?(:paginate)
-              @posts = Post.paginate(:all, find_args.merge(:page => params[:page]))
+            if posts.respond_to?(:paginate)
+              @posts = posts.paginate(:all, :page => params[:page])
             else
-              @posts = Post.find(:all, find_args.merge(:limit => 20))
+              @posts = posts.find(:all)
             end
             render :layout => false
           end
-          
         end
       end
       
@@ -69,7 +63,6 @@ module Bloget
         @post.poster = current_user
     
         if @post.save
-          @post.publish! if params[:post][:state] == 'published'
           flash[:notice] = "The post was successfully saved."
           redirect_to post_url(@post)
         else

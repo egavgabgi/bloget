@@ -46,13 +46,7 @@ class PostTest < ActiveSupport::TestCase
     assert !p2.valid?
     assert_not_nil p2.errors[:permalink]
   end
-  
-  def test_can_have_a_state
-    p = create_post
-
-    assert p.respond_to?(:state)
-  end
-  
+    
   def test_should_have_default_state_of_draft 
     p = Post.new(:poster_id => 1,
                  :poster_type => 'User',
@@ -72,12 +66,5 @@ class PostTest < ActiveSupport::TestCase
     p.publish!
     assert p.published?
   end
-  
-  def test_should_not_have_other_states
-    p = create_post
-    p.state = 'ready'
-
-    assert !p.valid?
-  end
-  
+    
 end

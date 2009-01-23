@@ -37,7 +37,7 @@ class CommentsControllerTest < ActionController::TestCase
     a_post = create_post
     
     post :create, :post_id => a_post.permalink, :comment => { :content => 'My comment' }
-    assert_redirected_to :controller => 'posts', :action => 'show'
+    assert_match /#{a_post.permalink}#comment_\d+$/, redirect_to_url
     assert_match "success", flash[:notice]
   end
 

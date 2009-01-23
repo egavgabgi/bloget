@@ -75,23 +75,9 @@ class PostsControllerTest < ActionController::TestCase
       :permalink => get_permalink,
       :content => 'Some content'
     }
-    assert_redirected_to :action => 'show'
+
+    assert_match /\/posts\/[a-z\d\-_]+$/, redirect_to_url
     assert_match "success", flash[:notice]
-  end
-
-  def test_post_should_be_published_when_published_passed_in_params
-    blogger = create_blogger
-    @controller.stubs(:logged_in?).returns(true)
-    @controller.stubs(:current_user).returns(blogger.poster)
-
-    p = create_post
-    Post.stubs(:new).returns(p)
-    p.stubs(:save).returns(true)
-    p.expects(:publish!)
-    
-    post :create, :post => {
-      :state => 'published'
-    }   
   end
   
   def test_must_be_logged_in_to_get_edit_form
@@ -169,7 +155,7 @@ class PostsControllerTest < ActionController::TestCase
   end
   
   def test_should_not_show_draft_posts_in_index
-    post = create_post(:state => 'draft', :title => String.random)
+    post = create_post(:published => false, :title => String.random)
     get :index
 
     assert_select "h2 a", :text => post.display_title, :count => 0
@@ -180,7 +166,7 @@ class PostsControllerTest < ActionController::TestCase
     @controller.stubs(:logged_in?).returns(true)
     @controller.stubs(:current_user).returns(blogger.poster)
 
-    post = create_post(:state => 'draft', :title => String.random)
+    post = create_post(:published => false, :title => String.random)
     get :index
 
     assert_select "h2 a", post.display_title
@@ -188,7 +174,7 @@ class PostsControllerTest < ActionController::TestCase
   end
   
   def test_should_not_show_individual_post_in_draft_state
-    post = create_post(:state => 'draft')
+    post = create_post(:published => false)
     get :show, :id => post.permalink
     assert_response 401
   end
@@ -198,7 +184,7 @@ class PostsControllerTest < ActionController::TestCase
     @controller.stubs(:logged_in?).returns(true)
     @controller.stubs(:current_user).returns(blogger.poster)
 
-    post = create_post(:state => 'draft')
+    post = create_post(:published => false)
     get :show, :id => post.permalink
     assert_response :success
   end

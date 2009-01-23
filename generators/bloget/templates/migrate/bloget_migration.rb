@@ -14,7 +14,7 @@ class BlogetMigration < ActiveRecord::Migration
       t.string :poster_type, :null => false
       t.string :title, :null => false
       t.text :content, :null => false
-      t.string :state, :null => false, :default => 'draft'
+      t.boolean :published, :null => false, :default => false
       t.timestamps 
     end
 

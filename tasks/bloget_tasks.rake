@@ -21,15 +21,13 @@ namespace :bloget do
   desc "Installs required and recommended plugins for Bloget."
   task :install_friends do
     Dir.chdir(RAILS_ROOT) do
-      puts `ruby script/plugin install http://svn.techno-weenie.net/projects/plugins/restful_authentication/`
-      puts `ruby script/plugin install svn://errtheblog.com/svn/plugins/will_paginate`
-      puts `ruby script/plugin install http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk/`
+      puts `ruby script/plugin install git://github.com/technoweenie/restful-authentication.git`
+      puts `ruby script/plugin install git://github.com/mislav/will_paginate.git`
     end
   end
   
   desc "Sets up a Rails app with the recommended infrastructure for Bloget."
   task :setup_app => [:load_rails, :install_friends] do
-#    puts `ruby script/generate authenticated user sessions --force`
     Rails::Generator::Scripts::Generate.new.run(['authenticated', 'user', 'sessions'])    
     Rails::Generator::Scripts::Generate.new.run(['bloget_app'])
   end

@@ -14,25 +14,11 @@ module Bloget
           validates_presence_of :permalink
           validates_uniqueness_of :permalink
           validates_format_of :permalink, :with => /^[\w\-]+$/,
-            :message => 'must only be made up of numbers, letters, and dashes'          
+          :message => 'must only be made up of numbers, letters, and dashes'
 
-          acts_as_state_machine :initial => :draft
-
-          state :draft
-          state :published, :enter => lambda { |o| o.save if o.new_record? }
-
-          validates_inclusion_of :state, :in => states.map { |s| s.to_s }
-
-          event :publish do
-            transitions :from => :draft, :to => :published, :guard => lambda { 
-              |o| o.valid?
-            }
-          end
-
-          event :unpublish do
-            transitions :from => :published, :to => :draft
-          end
-
+          named_scope :published, { :conditions => ['published = ?', true] }
+          named_scope :draft, { :conditions => ['published = ?', false] }
+          named_scope :chronologically, { :order => 'created_at DESC' }
         end        
       end
       
@@ -42,10 +28,30 @@ module Bloget
       
       def display_title
         title = read_attribute(:title)
-        title += " [DRAFT]" if !title.empty? and state == 'draft'
+        title += " [DRAFT]" if !title.empty? and draft?
         title
       end
-            
+
+      def publish
+        update_attribute(:published, true)
+      end
+
+      alias :publish! :publish
+
+      def unpublish
+        update_attribute(:published, false)
+      end
+
+      alias :unpublish! :unpublish
+
+      def draft?
+        !published?
+      end
+
+      def state
+        published? ? 'published' : 'draft'
+      end
+      
     end
   end
 end

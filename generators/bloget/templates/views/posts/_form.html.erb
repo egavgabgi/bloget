@@ -9,10 +9,8 @@
 </div>
 
 <div class="field">
-  <label for="post_state">State:</label><br />
-  <% Post.states.each do |state| %>
-    <%= form.radio_button :state, state %> <%= state.to_s.capitalize %><br />
-  <% end %>
+  <label for="post_published">Published?</label>
+  <%= form.check_box :published %>
 </div>
 
 <div class="field">
