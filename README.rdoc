@@ -10,10 +10,6 @@ Bloget uses polymorphic associations for its idea of a +poster+, or an object th
 
 == Requirements
 
-=== Edge Rails
-
-Bloget requires Edge Rails. It is being developed on revision 7661 currently, although it is known to work with revisions at least two weeks before that.
-
 === Other plugins
 
 Bloget does not require any other plugins. However, some are useful.
@@ -24,9 +20,9 @@ The Will Paginate plugin is also not necessary, but very useful. Bloget will det
 
 == Integration
 
-=== Integrating with a user model
+=== Integrating with a user model or other posting-enabled model
 
-In your user model:
+In your model:
 
     include Bloget::Models::Poster
     
